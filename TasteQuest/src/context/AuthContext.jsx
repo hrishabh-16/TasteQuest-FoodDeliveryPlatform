@@ -1,33 +1,36 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-export const AuthContext = createContext();
+const AuthContext = createContext();
+
+export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Remove the SERVER_URL and baseURL setting
+  // axios will use the relative URLs, which will be handled by the proxy
+
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      console.log('Token found in localStorage');
       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      fetchUser();
+      checkAuthStatus();
     } else {
-      console.log('No token found in localStorage');
       setLoading(false);
     }
   }, []);
 
-  const fetchUser = async () => {
+  const checkAuthStatus = async () => {
     try {
-      console.log('Fetching user data...');
-      const res = await axios.get('http://localhost:5002/api/auth/user');
-      console.log('User data received:', res.data);
-      setUser(res.data);
+      const response = await axios.get('/api/auth/user');
+      setUser(response.data);
     } catch (error) {
-      console.error('Error fetching user:', error.response?.data || error.message);
-      logout(); // Clear invalid token
+      console.error('Error checking auth status:', error);
+      localStorage.removeItem('token');
+      delete axios.defaults.headers.common['Authorization'];
     } finally {
       setLoading(false);
     }
@@ -35,39 +38,41 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      console.log('Attempting login...');
-      const res = await axios.post('http://localhost:5002/api/auth/login', { email, password });
-      console.log('Login response:', res.data);
-      localStorage.setItem('token', res.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-      await fetchUser();
-      return res.data;
+      const response = await axios.post('/api/auth/login', { email, password });
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(user);
+      toast.success('Logged in successfully');
+      return true;
     } catch (error) {
-      console.error('Login error:', error.response?.data || error.message);
-      throw error.response ? error.response.data : error;
+      console.error('Login error:', error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || 'An error occurred during login');
+      return false;
     }
   };
 
   const register = async (email, password) => {
     try {
-      console.log('Attempting registration...');
-      const res = await axios.post('http://localhost:5002/api/auth/register', { email, password });
-      console.log('Registration response:', res.data);
-      localStorage.setItem('token', res.data.token);
-      axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-      await fetchUser();
-      return res.data;
+      const response = await axios.post('/api/auth/register', { email, password });
+      const { token, user } = response.data;
+      localStorage.setItem('token', token);
+      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      setUser(user);
+      toast.success('Registered successfully');
+      return true;
     } catch (error) {
-      console.error('Registration error:', error.response?.data || error.message);
-      throw error.response ? error.response.data : error;
+      console.error('Registration error:', error.response?.data?.message || error.message);
+      toast.error(error.response?.data?.message || 'An error occurred during registration');
+      return false;
     }
   };
 
   const logout = () => {
-    console.log('Logging out...');
     localStorage.removeItem('token');
     delete axios.defaults.headers.common['Authorization'];
     setUser(null);
+    toast.info('Logged out successfully');
   };
 
   return (
@@ -76,3 +81,203 @@ export const AuthProvider = ({ children }) => {
     </AuthContext.Provider>
   );
 };
+
+export { AuthContext };
+
+
+
+
+
+// import React, { createContext, useContext, useState, useEffect } from 'react';
+// import axios from 'axios';
+// import { toast } from 'react-toastify';
+
+// const AuthContext = createContext();
+
+// export const useAuth = () => useContext(AuthContext);
+
+// export const AuthProvider = ({ children }) => {
+//   const [user, setUser] = useState(null);
+//   const [loading, setLoading] = useState(true);
+
+//   // Set base URL for Axios from environment variable
+//   const SERVER_URL = 'http://localhost:6000';
+//   axios.defaults.baseURL = SERVER_URL;
+
+//   useEffect(() => {
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+//       checkAuthStatus();
+//     } else {
+//       setLoading(false);
+//     }
+//   }, []);
+
+//   const checkAuthStatus = async () => {
+//     try {
+//       const response = await axios.get('/api/auth/user');
+//       if (response.status === 200) {
+//         setUser(response.data);
+//       } else {
+//         setUser(null);
+//       }
+//     } catch (error) {
+//       console.error('Error checking auth status:', error);
+//       setUser(null);
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   const login = async (email, password) => {
+//     try {
+//       const response = await axios.post('/api/auth/login', { email, password });
+//       if (response.data.token) {
+//         localStorage.setItem('token', response.data.token);
+//         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+//         setUser(response.data.user);
+//         toast.success('Logged in successfully');
+//       } else {
+//         toast.error('Invalid credentials');
+//       }
+//     } catch (error) {
+//       console.error('Login error:', error.response?.data || error.message);
+//       toast.error('An error occurred during login. Please try again.');
+//     }
+//   };
+
+//   const register = async (email, password) => {
+//     try {
+//       const response = await axios.post('/api/auth/register', { email, password });
+//       if (response.data.token) {
+//         localStorage.setItem('token', response.data.token);
+//         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+//         setUser(response.data.user);
+//         toast.success('Registered successfully');
+//       } else {
+//         toast.error('Registration failed. Please try again.');
+//       }
+//     } catch (error) {
+//       console.error('Registration error:', error.response?.data || error.message);
+//       toast.error('An error occurred during registration. Please try again.');
+//     }
+//   };
+
+//   const logout = async () => {
+//     try {
+//       await axios.post('/api/auth/logout');
+//       localStorage.removeItem('token');
+//       delete axios.defaults.headers.common['Authorization'];
+//       setUser(null);
+//       toast.info('Logged out successfully');
+//     } catch (error) {
+//       console.error('Error during logout:', error);
+//       toast.error('An error occurred during logout. Please try again.');
+//     }
+//   };
+
+//   return (
+//     <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+//       {children}
+//     </AuthContext.Provider>
+//   );
+// };
+
+// export { AuthContext };
+
+
+
+
+// // import React, { createContext, useContext, useState, useEffect } from 'react';
+// // import axios from 'axios';
+// // import { toast } from 'react-toastify';
+
+// // const AuthContext = createContext();
+
+// // export const useAuth = () => useContext(AuthContext);
+
+// // export const AuthProvider = ({ children }) => {
+// //   const [user, setUser] = useState(null);
+// //   const [loading, setLoading] = useState(true);
+
+// //   useEffect(() => {
+// //     const token = localStorage.getItem('token');
+// //     if (token) {
+// //       axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+// //       checkAuthStatus();
+// //     } else {
+// //       setLoading(false);
+// //     }
+// //   }, []);
+
+// //   const checkAuthStatus = async () => {
+// //     try {
+// //       const response = await axios.get('/api/auth/user');
+// //       if (response.status === 200) {
+// //         setUser(response.data);
+// //       } else {
+// //         setUser(null);
+// //       }
+// //     } catch (error) {
+// //       console.error('Error checking auth status:', error);
+// //       setUser(null);
+// //     } finally {
+// //       setLoading(false);
+// //     }
+// //   };
+
+// //   const login = async (email, password) => {
+// //     try {
+// //       const response = await axios.post('/api/auth/login', { email, password });
+// //       if (response.data.token) {
+// //         localStorage.setItem('token', response.data.token);
+// //         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+// //         setUser(response.data.user);
+// //         toast.success('Logged in successfully');
+// //       } else {
+// //         toast.error('Invalid credentials');
+// //       }
+// //     } catch (error) {
+// //       console.error('Login error:', error.response?.data || error.message);
+// //       toast.error('An error occurred during login. Please try again.');
+// //     }
+// //   };
+
+// //   const register = async (email, password) => {
+// //     try {
+// //       const response = await axios.post('/api/auth/register', { email, password });
+// //       if (response.data.token) {
+// //         localStorage.setItem('token', response.data.token);
+// //         axios.defaults.headers.common['Authorization'] = `Bearer ${response.data.token}`;
+// //         setUser(response.data.user);
+// //         toast.success('Registered successfully');
+// //       } else {
+// //         toast.error('Registration failed. Please try again.');
+// //       }
+// //     } catch (error) {
+// //       console.error('Registration error:', error.response?.data || error.message);
+// //       toast.error('An error occurred during registration. Please try again.');
+// //     }
+// //   };
+
+// //   const logout = async () => {
+// //     try {
+// //       await axios.post('/api/auth/logout');
+// //       localStorage.removeItem('token');
+// //       delete axios.defaults.headers.common['Authorization'];
+// //       setUser(null);
+// //       toast.info('Logged out successfully');
+// //     } catch (error) {
+// //       console.error('Error during logout:', error);
+// //       toast.error('An error occurred during logout. Please try again.');
+// //     }
+// //   };
+
+// //   return (
+// //     <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+// //       {children}
+// //     </AuthContext.Provider>
+// //   );
+// // };
+// // export { AuthContext };

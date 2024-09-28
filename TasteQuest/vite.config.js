@@ -6,4 +6,13 @@ export default defineConfig({
   css: {
     postcss: './postcss.config.js',  // Ensure this line points to your PostCSS config
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:6000',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  }
 });

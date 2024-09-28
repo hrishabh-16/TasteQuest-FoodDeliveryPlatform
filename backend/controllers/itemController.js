@@ -1,19 +1,31 @@
 const Item = require('../models/Item');
 
-exports.getAllItems = async (req, res) => {
+exports.getAllItems = async (req, res, next) => {
   try {
     const items = await Item.find();
     res.json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching items', error: error.message });
+    next(error);
   }
 };
 
-exports.getCategories = async (req, res) => {
+exports.getItem = async (req, res, next) => {
   try {
-    const categories = await Item.distinct('category');
-    res.json(categories);
+    const item = await Item.findById(req.params.id);
+    if (!item) {
+      return res.status(404).json({ message: 'Item not found' });
+    }
+    res.json(item);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching categories', error: error.message });
+    next(error);
+  }
+};
+
+exports.getItemsByCategory = async (req, res, next) => {
+  try {
+    const items = await Item.find({ category: req.params.categoryId });
+    res.json(items);
+  } catch (error) {
+    next(error);
   }
 };
