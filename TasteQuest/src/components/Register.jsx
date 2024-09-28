@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const { register } = useAuth();
+  const { register, handleGoogleSignIn } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await register(email, password);
+    if (success) {
+      navigate('/');
+    }
+  };
+
+  const onGoogleSignInSuccess = async (credentialResponse) => {
+    const success = await handleGoogleSignIn(credentialResponse);
     if (success) {
       navigate('/');
     }
@@ -49,29 +57,34 @@ const Register = () => {
             Register
           </button>
         </form>
-
+        
         <p className="text-sm text-center text-textSecondary mt-4">
           Already have an account?{' '}
           <a href="/login" className="text-primary font-semibold hover:underline">
             Login
           </a>
         </p>
-
+        
         <div className="flex items-center my-4">
           <hr className="flex-grow border-t" />
           <span className="px-4 text-sm text-textSecondary">OR</span>
           <hr className="flex-grow border-t" />
         </div>
-
-        <div className="flex flex-col space-y-3">
-          <button className="flex items-center justify-center bg-white border text-textPrimary rounded-md py-3 hover:bg-gray-100 transition">
-            <img src="/images/google-icon.png" alt="Google Icon" className="w-5 h-5 mr-2" />
-            Continue with Google
-          </button>
-          <button className="flex items-center justify-center bg-blue-600 text-white rounded-md py-3 hover:bg-blue-700 transition">
-            <img src="/images/facebook-icon.png" alt="Facebook Icon" className="w-5 h-5 mr-2" />
-            Continue with Facebook
-          </button>
+        
+        <div className="flex justify-center">
+          <div className="w-full">
+            <GoogleLogin
+              onSuccess={onGoogleSignInSuccess}
+              onError={() => {
+                console.log('Login Failed');
+              }}
+              size="large"
+              width="100%"
+              text="signin_with"
+              shape="rectangular"
+              logo_alignment="left"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -80,7 +93,7 @@ const Register = () => {
 
 export default Register;
 
-
+ 
 
 
 
