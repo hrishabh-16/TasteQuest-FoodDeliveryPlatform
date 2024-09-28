@@ -10,6 +10,8 @@ import Cart from './components/Cart';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import 'react-toastify/dist/ReactToastify.css';
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 
 function AppContent() {
   const { user, logout } = useContext(AuthContext);
@@ -68,13 +70,15 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <Router>
-          <AppContent />
-        </Router>
-      </CartProvider>
-    </AuthProvider>
+    <GoogleOAuthProvider clientId="171194344199-uhefr29aar1labtid6ns9l6hho7gv5p7.apps.googleusercontent.com">
+      <AuthProvider>
+        <CartProvider>
+          <Router>
+            <AppContent />
+          </Router>
+        </CartProvider>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }
 
