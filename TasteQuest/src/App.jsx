@@ -17,7 +17,7 @@ function AppContent() {
   return (
     <div className="font-roboto min-h-screen bg-background">
       {/* Navbar */}
-      <nav className="bg-primary text-white py-4 shadow-md">
+      <nav className="bg-primary sticky top-0 z-50 text-white py-4 shadow-md">
         <div className="container mx-auto flex justify-between items-center px-4">
           <Link to="/" className="text-2xl font-bold">TasteQuest</Link>
           <div className="flex space-x-4">
