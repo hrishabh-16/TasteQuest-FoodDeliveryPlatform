@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GoogleLogin } from '@react-oauth/google';
 
@@ -23,6 +23,7 @@ const Register = () => {
       navigate('/');
     }
   };
+
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-register-bg bg-cover bg-center">
