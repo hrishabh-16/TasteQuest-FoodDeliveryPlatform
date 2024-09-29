@@ -113,7 +113,7 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/search', searchRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/checkout', checkoutRoutes);
-
+app.use('/api/cuisines', require('./routes/cuisines'));
 app.use(errorHandler);
 
 app.listen(PORT, () => {

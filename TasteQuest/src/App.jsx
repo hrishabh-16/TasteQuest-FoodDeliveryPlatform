@@ -13,6 +13,8 @@ import 'react-toastify/dist/ReactToastify.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import Navbar from './components/Navbar';
 import SearchResults from './components/SearchResults';
+import Profile from './components/Profile';
+import Orders from './components/Orders';
 
 
 function AppContent() {
@@ -30,6 +32,8 @@ function AppContent() {
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/search" element={<SearchResults />} />  {/* Add this route */}
+          <Route path="/profile" element={<Profile />} />  
+          <Route path="/orders" element={<Orders />} />  
         </Routes>
       </main>
 
@@ -40,15 +44,18 @@ function AppContent() {
 
 function App() {
   return (
-    <GoogleOAuthProvider clientId="171194344199-uhefr29aar1labtid6ns9l6hho7gv5p7.apps.googleusercontent.com">
+    <Router>
+      <GoogleOAuthProvider clientId="171194344199-uhefr29aar1labtid6ns9l6hho7gv5p7.apps.googleusercontent.com">
+      
       <AuthProvider>
         <CartProvider>
-          <Router>
+          
             <AppContent />
-          </Router>
+          
         </CartProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
+    </Router>
   );
 }
 
