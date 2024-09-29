@@ -7,6 +7,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Inventory from './components/Inventory';
 import Cart from './components/Cart';
+import ContactPage from './components/contact-page';
 import { AuthProvider, AuthContext } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import 'react-toastify/dist/ReactToastify.css';
@@ -34,6 +35,7 @@ function AppContent() {
           <Route path="/search" element={<SearchResults />} />  {/* Add this route */}
           <Route path="/profile" element={<Profile />} />  
           <Route path="/orders" element={<Orders />} />  
+          <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
 

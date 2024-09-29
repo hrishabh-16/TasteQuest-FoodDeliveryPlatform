@@ -16,6 +16,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
+import { DropdownMenuSeparator } from "@radix-ui/react-dropdown-menu";
+import {
+  ChevronDown,
+  ClipboardList,
+  Home,
+  LogOut,
+  User,
+  UserCircle,
+} from "lucide-react";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -39,7 +48,7 @@ const Navbar = () => {
         <Link to="/" className="text-2xl font-bold">
           TasteQuest
         </Link>
-        <div className="flex space-x-4 items-center">
+        <div className="flex space-x-10 px-2 items-center">
           {/* Search Form */}
           <form onSubmit={handleSearch} className="relative">
             <Input
@@ -47,7 +56,7 @@ const Navbar = () => {
               placeholder="Search for items"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10 pr-4 py-2 rounded-full bg-primary-foreground text-primary w-64"
+              className="pl-10 pr-4 py-2 rounded-full bg-primary-foreground text-primary w-80"
             />
             <FiSearch
               className="absolute left-3 top-1/2 transform -translate-y-1/2 text-primary cursor-pointer"
@@ -67,21 +76,47 @@ const Navbar = () => {
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="flex items-center space-x-2">
-                  <FiUser />
-                  <span className="hidden sm:inline">{user.email}</span>
-                  <FiChevronDown />
+                <Button
+                  variant="ghost"
+                  className="flex items-center space-x-2 hover:bg-gray-100 transition-colors duration-200"
+                >
+                  <User className="h-5 w-5" />
+                  <span className="hidden sm:inline font-medium">
+                    {user?.name}
+                  </span>
+                  <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onSelect={() => navigate("/profile")}>
-                  <span className="font-roboto">Profile</span>
+              <DropdownMenuContent className="w-56 p-1 font-roboto">
+                <DropdownMenuItem
+                  onSelect={() => navigate("/")}
+                  className="flex cursor-pointer items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md transition-colors duration-200 "
+                >
+                  <Home className="mr-2 h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Home</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate("/orders")}>
-                  <span className="font-roboto">Order History</span>
+                <DropdownMenuSeparator className="my-1 bg-gray-200" />
+                <DropdownMenuItem
+                  onSelect={() => navigate("/profile")}
+                  className="flex cursor-pointer items-center px-3 py-2 text-sm hover:bg-gray-100 rounded-md transition-colors duration-200"
+                >
+                  <UserCircle className="mr-2 h-4 w-4 text-gray-500" />
+                  <span className="font-medium ">Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={logout}>
-                  <span className="font-roboto">Logout</span>
+                <DropdownMenuItem
+                  onSelect={() => navigate("/orders")}
+                  className="flex items-center  cursor-pointer px-3 py-2 text-sm hover:bg-gray-100 rounded-md transition-colors duration-200"
+                >
+                  <ClipboardList className="mr-2 h-4 w-4 text-gray-500" />
+                  <span className="font-medium">Order History</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator className="my-1 bg-gray-200" />
+                <DropdownMenuItem
+                  onSelect={logout}
+                  className="flex items-center  cursor-pointer px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md transition-colors duration-200"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span className="font-medium ">Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -1,5 +1,5 @@
 // src/components/Home.jsx
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import axios from 'axios';
 import CuisineCard from './CuisineCard';
@@ -45,7 +45,7 @@ const Home = () => {
         <h1 className="text-3xl font-nunito font-bold text-primary">Welcome to TasteQuest</h1>
         <p className="text-lg text-gray-600">Your ultimate food ordering platform</p>
         {user ? (
-          <p className="text-lg text-secondary mt-4">Welcome back, {user.email}!</p>
+          <p className="text-lg text-primary mt-4">Welcome back, {user.name}!</p>
         ) : (
           <p className="text-lg text-gray-600 mt-4">Please log in or register to start ordering.</p>
         )}
