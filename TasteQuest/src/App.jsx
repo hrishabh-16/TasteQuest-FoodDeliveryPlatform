@@ -1,14 +1,13 @@
-import React, { useContext } from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { FiShoppingCart, FiUser, FiSearch } from 'react-icons/fi';
 import Home from './components/Home';
 import Login from './components/Login';
 import Register from './components/Register';
 import Inventory from './components/Inventory';
 import Cart from './components/Cart';
 import ContactPage from './components/contact-page';
-import { AuthProvider, AuthContext } from './context/AuthContext';
+import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import 'react-toastify/dist/ReactToastify.css';
 import { GoogleOAuthProvider } from '@react-oauth/google';
@@ -17,9 +16,45 @@ import SearchResults from './components/SearchResults';
 import Profile from './components/Profile';
 import Orders from './components/Orders';
 
-
 function AppContent() {
-
+  const cuisines = [
+    {
+      name: "Indian",
+      description: "Spicy and flavorful dishes from the Indian subcontinent",
+      image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_366/1d578bb732e03c6f591790eb7d2d88e2"
+    },
+    {
+      name: "Chinese",
+      description: "Diverse flavors from China's rich culinary traditions",
+      image: "https://media-assets.swiggy.com/swiggy/image/upload/f_auto,q_auto,fl_lossy/yybzl3yxaefdrajiekbq"
+    },
+    {
+      name: "Thai",
+      description: "Aromatic dishes with a perfect balance of flavors",
+      image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_366/a6dc728d455b05266884b032bfce155d"
+    },
+    {
+      name: "Spanish",
+      description: "Vibrant and diverse cuisine from the Iberian Peninsula",
+      image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_600/FOOD_CATALOG/IMAGES/CMS/2024/5/1/49909389-3160-4ea4-8053-b5997ccf352a_e4c1c0a8-ae38-4a28-980c-644ded50ade4.jpeg"
+    },
+    {
+      name: "Italian",
+      description: "Classic Mediterranean flavors and world-famous pasta dishes",
+      image: "https://blog.swiggy.com/wp-content/uploads/2024/09/Image-7_Alfredo-Pasta-1024x538.png"
+    },
+    {
+      name: "Mexican",
+      description: "Bold and zesty flavors from south of the border",
+      image: "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,h_600/FOOD_CATALOG/IMAGES/CMS/2024/4/18/c55e3828-22ec-4a32-a7d2-b59bd98a5cdf_74f48ecf-4bc8-4bae-b2f6-b87566db5208.jpg_compressed"
+    },
+    {
+      name: "South Indian",
+      description: "Delicious and diverse cuisine from Southern India",
+      image: "https://media.istockphoto.com/id/1292563627/photo/assorted-south-indian-breakfast-foods-on-wooden-background-ghee-dosa-uttappam-medhu-vada.jpg?s=612x612&w=0&k=20&c=HvuYT3RiWj5YsvP2_pJrSWIcZUXhnTKqjKhdN3j_SgY="
+    }
+  ];
+  
   return (
     <div className="font-roboto min-h-screen bg-background">
       {/* Navbar */}
@@ -27,14 +62,14 @@ function AppContent() {
 
       <main className="container mx-auto mt-8 px-4">
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<Home cuisines={cuisines} />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/search" element={<SearchResults />} />  {/* Add this route */}
-          <Route path="/profile" element={<Profile />} />  
-          <Route path="/orders" element={<Orders />} />  
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/orders" element={<Orders />} />
           <Route path="/contact" element={<ContactPage />} />
         </Routes>
       </main>
@@ -48,20 +83,19 @@ function App() {
   return (
     <Router>
       <GoogleOAuthProvider clientId="171194344199-uhefr29aar1labtid6ns9l6hho7gv5p7.apps.googleusercontent.com">
-      
-      <AuthProvider>
-        <CartProvider>
-          
+        <AuthProvider>
+          <CartProvider>
             <AppContent />
-          
-        </CartProvider>
-      </AuthProvider>
-    </GoogleOAuthProvider>
+          </CartProvider>
+        </AuthProvider>
+      </GoogleOAuthProvider>
     </Router>
   );
 }
 
 export default App;
+
+
 
 
 
