@@ -1,4 +1,4 @@
-// backend/models/Item.js
+// backend/models/Item.js nnn
 const mongoose = require('mongoose');
 
 const itemSchema = new mongoose.Schema({
