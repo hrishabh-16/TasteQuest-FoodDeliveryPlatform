@@ -39,6 +39,11 @@ const cuisines = [
     name: "South Indian",
     description: "Delicious and diverse cuisine from Southern India",
     image: "https://media.istockphoto.com/id/1292563627/photo/assorted-south-indian-breakfast-foods-on-wooden-background-ghee-dosa-uttappam-medhu-vada.jpg?s=612x612&w=0&k=20&c=HvuYT3RiWj5YsvP2_pJrSWIcZUXhnTKqjKhdN3j_SgY="
+  },
+  {
+    "name": "Vietnamese",
+    "description": "Fresh and fragrant dishes emphasizing herbs, vegetables, and rice",
+    "image": "https://media.istockphoto.com/id/1292563627/photo/assorted-south-indian-breakfast-foods-on-wooden-background-ghee-dosa-uttappam-medhu-vada.jpg?s=612x612&w=0&k=20&c=HvuYT3RiWj5YsvP2_pJrSWIcZUXhnTKqjKhdN3j_SgY="
   }
 ];
 
