@@ -22,7 +22,7 @@ TasteQuest is a full-stack food ordering web application built using the MERN (M
 
 ## Setting Up TasteQuest
 
-Follow these instructions to set up TeachQuest locally.
+Follow these instructions to set up TasteQuest locally.
 
 ### Prerequisites
 
@@ -122,5 +122,5 @@ The application should now be running. Access the frontend at `http://localhost:
 
 ## Contributing
 
-Contributions to TeachQuest are welcome. Please ensure to follow the project's code style and submit pull requests for any new features or bug fixes.
+Contributions to TasteQuest are welcome. Please ensure to follow the project's code style and submit pull requests for any new features or bug fixes.
 
